@@ -83,6 +83,9 @@ a {
     padding-bottom: 0.75rem;
     transition: box-shadow var(--transition), padding var(--transition);
     z-index: 1050;
+    height: 80px;  /* ADD THIS LINE - Fixed navbar height */
+    display: flex;
+    align-items: center;  /* ADD THIS - Centers content vertically */
 }
 
 #mainNav.scrolled {
@@ -90,11 +93,12 @@ a {
     box-shadow: var(--shadow-md);
     padding-top: .5rem;
     padding-bottom: .5rem;
+    height: 70px;  /* Keep it consistent but slightly smaller when scrolled */
 }
 
 /* Logo — sized to fit neatly in navbar */
 .nav-logo {
-    height: 48px;
+    height: 80px;
     width: auto;
     object-fit: contain;
     flex-shrink: 0;
@@ -123,6 +127,12 @@ a {
     border-radius: var(--radius-sm);
     transition: color var(--transition), background var(--transition);
     letter-spacing: .01em;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
 }
 
 .navbar-nav .nav-link:hover,
