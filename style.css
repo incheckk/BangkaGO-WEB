@@ -78,35 +78,59 @@ a {
    NAVBAR — always dark background, fully visible
    ============================================================ */
 #mainNav {
-    background: var(--blue-900);
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
-    transition: box-shadow var(--transition), padding var(--transition);
-    z-index: 1050;
+  background: var(--blue-900);
+  padding-top: 0.5rem;      
+  padding-bottom: 0.5rem;
+  z-index: 1050;
+  transition: box-shadow var(--transition), padding var(--transition);
+}
+
+/* Brand container: lock height so logo size doesn't resize navbar */
+#mainNav .navbar-brand{
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;        /* closer to text */
+  height: 80px;    /* slot height */
+  overflow: hidden;
+  padding: 0;
+}
+
+/* Logo size (no distortion) */
+#mainNav .nav-logo{
+  height: 80px;    /* your target */
+  width: auto;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+}
+
+/* Text vertical spacing fix */
+#mainNav .brand-text{
+  line-height: 1;
+  margin: 0;
 }
 
 #mainNav.scrolled {
-    background: var(--blue-900);
-    box-shadow: var(--shadow-md);
-    padding-top: .5rem;
-    padding-bottom: .5rem;
+  background: var(--blue-900);
+  box-shadow: var(--shadow-md);
+  padding-top: .5rem;
+  padding-bottom: .5rem;
 }
 
 /* Logo — sized to fit neatly in navbar */
 .nav-logo {
-    height: 48px;
-    width: auto;
+    height: 80px;              /* change this anytime */
+    width: auto;               /* prevents distortion */
+    display: block;            /* removes baseline/descender gaps */
     object-fit: contain;
-    flex-shrink: 0;
+    transform: translateY(7px);   
 }
 
 /* Brand name text */
 .brand-text {
-    font-family: var(--font-display);
-    font-size: 1.45rem;
-    font-weight: 800;
-    color: var(--white);
-    letter-spacing: -.5px;
+    line-height: 1;            /* IMPORTANT: removes extra vertical space */
+    margin: 0;
+    display: inline-block;
 }
 
 .brand-accent {
@@ -123,6 +147,14 @@ a {
     border-radius: var(--radius-sm);
     transition: color var(--transition), background var(--transition);
     letter-spacing: .01em;
+}
+
+.navbar-brand {
+    display: inline-flex;      /* keeps it only as wide as content */
+    align-items: center;       /* vertical centering between logo and text */
+    gap: 0.75rem;              /* spacing between logo and text */
+    padding-top: 0;            /* avoid extra vertical spacing */
+    padding-bottom: 0;
 }
 
 .navbar-nav .nav-link:hover,
