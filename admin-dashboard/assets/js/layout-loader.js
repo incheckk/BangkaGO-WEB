@@ -1,7 +1,103 @@
 (async function () {
+  const isFileProtocol = window.location.protocol === 'file:';
+
+  function getFallbackHtml(path) {
+    switch (path) {
+      case 'partials/sidebar.html':
+        return `
+<aside class="admin-sidebar" id="adminSidebar">
+  <a href="index.html" class="admin-brand">
+    <div class="brand-logo">
+      <img src="../images/logo-BangkaGo.png" alt="BangkaGo Logo" onerror="this.style.display='none'">
+    </div>
+    <div class="brand-text">
+      <h5>Bangka<span>Go</span></h5>
+      <small>Admin Dashboard</small>
+    </div>
+  </a>
+
+  <nav class="admin-nav mt-3" id="adminNav">
+    <div class="nav-group-label">Core</div>
+    <a href="index.html" data-page="index.html">
+      <i class="bi bi-grid-1x2-fill"></i> Dashboard
+    </a>
+
+    <div class="nav-group-label">Management</div>
+    <a href="users.html" data-page="users.html">
+      <i class="bi bi-people-fill"></i> User Management
+    </a>
+    <a href="operators.html" data-page="operators.html">
+      <i class="bi bi-person-check-fill"></i> Bangkeros
+    </a>
+    <a href="bookings.html" data-page="bookings.html">
+      <i class="bi bi-journal-check"></i> Bookings
+    </a>
+    <a href="fleet-routes.html" data-page="fleet-routes.html">
+      <i class="bi bi-boat"></i> Fleet & Routes
+    </a>
+
+    <div class="nav-group-label">Operations</div>
+    <a href="tracking.html" data-page="tracking.html">
+      <i class="bi bi-geo-alt-fill"></i> Tracking & Monitoring
+    </a>
+    <a href="payments.html" data-page="payments.html">
+      <i class="bi bi-cash-coin"></i> Payments & Revenue
+    </a>
+    <a href="alerts.html" data-page="alerts.html">
+      <i class="bi bi-exclamation-triangle-fill"></i> Safety & Alerts
+    </a>
+    <a href="reports.html" data-page="reports.html">
+      <i class="bi bi-file-earmark-bar-graph-fill"></i> Reports & Logs
+    </a>
+
+    <div class="nav-group-label">Intelligence</div>
+    <a href="analytics.html" data-page="analytics.html">
+      <i class="bi bi-cpu-fill"></i> Analytics / ML Insights
+    </a>
+
+    <div class="nav-group-label">Comms</div>
+    <a href="broadcast.html" data-page="broadcast.html">
+      <i class="bi bi-megaphone-fill"></i> Broadcast
+    </a>
+  </nav>
+</aside>`;
+      case 'partials/topbar.html':
+        return `
+<header class="admin-topbar">
+  <div class="d-flex align-items-center gap-2">
+    <button id="sidebarMobileToggle" class="btn btn-light d-lg-none topbar-btn">
+      <i class="bi bi-list fs-5"></i>
+    </button>
+    <button id="sidebarDesktopToggle" class="btn btn-light d-none d-lg-inline-flex topbar-btn" title="Collapse Sidebar">
+      <i class="bi bi-layout-sidebar-inset"></i>
+    </button>
+    <div>
+      <h4 class="mb-0" id="topbarTitle">Dashboard</h4>
+      <small id="topbarSubtitle">Admin control panel</small>
+    </div>
+  </div>
+
+  <div class="topbar-right">
+    <button class="icon-btn"><i class="bi bi-bell"></i></button>
+    <button class="icon-btn"><i class="bi bi-envelope"></i></button>
+    <div class="admin-pill">
+      <i class="bi bi-person-circle me-1"></i> BiniAiah
+    </div>
+  </div>
+</header>`;
+      default:
+        return `<div>Unable to load ${path}</div>`;
+    }
+  }
+
   async function injectPartial(selector, path) {
     const mount = document.querySelector(selector);
     if (!mount) return;
+
+    if (isFileProtocol) {
+      mount.innerHTML = getFallbackHtml(path);
+      return;
+    }
 
     try {
       const res = await fetch(path, { cache: 'no-cache' });
@@ -9,11 +105,7 @@
       mount.innerHTML = await res.text();
     } catch (err) {
       console.error(err);
-      mount.innerHTML = `
-        <div style="padding:12px;background:#fff3cd;border:1px solid #ffe69c;border-radius:8px;margin:12px;">
-          Failed to load partial: <strong>${path}</strong>
-        </div>
-      `;
+      mount.innerHTML = getFallbackHtml(path);
     }
   }
 
