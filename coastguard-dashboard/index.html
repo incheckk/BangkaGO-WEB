@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BangkaGo Coast Guard — Overview</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/coastguard-theme.css"/>
+</head>
+<body data-page="index">
+  <div class="cg-shell">
+    <div id="sidebarMount"></div>
+
+    <main class="cg-main" id="cgMain">
+      <div id="topbarMount"></div>
+
+      <section class="cg-content container-fluid">
+        <!-- KPI -->
+        <div class="row g-3 mb-4">
+          <div class="col-6 col-xl-3">
+            <div class="cg-card kpi-card">
+              <p>Active Bangkas</p>
+              <h3>18</h3>
+              <span class="kpi-up">Monitoring live</span>
+              <div class="kpi-mini-chart chart-up"></div>
+            </div>
+          </div>
+          <div class="col-6 col-xl-3">
+            <div class="cg-card kpi-card">
+              <p>Open Maritime Alerts</p>
+              <h3>4</h3>
+              <span class="kpi-warn">Coast watch advised</span>
+              <div class="kpi-mini-chart chart-warn"></div>
+            </div>
+          </div>
+          <div class="col-6 col-xl-3">
+            <div class="cg-card kpi-card">
+              <p>Delayed Routes</p>
+              <h3>3</h3>
+              <span class="kpi-warn">Weather impact</span>
+              <div class="kpi-mini-chart chart-warn"></div>
+            </div>
+          </div>
+          <div class="col-6 col-xl-3">
+            <div class="cg-card kpi-card">
+              <p>Critical Incidents</p>
+              <h3>1</h3>
+              <span class="kpi-down">Active response</span>
+              <div class="kpi-mini-chart chart-down"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Full-width map -->
+        <div class="row g-3 mb-3">
+          <div class="col-12">
+            <div class="cg-card map-box">
+              <div class="panel-head">
+                <h6 class="mb-0">Live Maritime Monitoring Map</h6>
+                <span class="readonly-pill"><i class="bi bi-eye-fill"></i> Read Only</span>
+              </div>
+
+              <img src="../images/map.jpg" alt="Coast guard live map" class="live-map-img"/>
+
+              <div class="route-pill-wrap">
+                <span class="route-pill">Zone A Patrol</span>
+                <span class="route-pill">Port B → Island A</span>
+                <span class="route-pill">Sea State: Moderate</span>
+                <span class="route-pill">Signal: Stable</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lower row -->
+        <div class="row g-3">
+          <div class="col-xl-7">
+            <div class="cg-card h-100">
+              <div class="panel-head">
+                <h6 class="mb-0">Live Bangka Activity Feed</h6>
+                <span class="muted-note">View only</span>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-theme align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th>Bangka</th>
+                      <th>Route</th>
+                      <th>Status</th>
+                      <th>Last Ping</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Boat 08</td>
+                      <td>Marigondon Port -> Olanggo</td>
+                      <td><span class="badge text-bg-success">On Track</span></td>
+                      <td>14:21</td>
+                    </tr>
+                    <tr>
+                      <td>Boat 03</td>
+                      <td>Marigondon Port -> Olanggo</td>
+                      <td><span class="badge text-bg-warning">Delayed</span></td>
+                      <td>14:18</td>
+                    </tr>
+                    <tr>
+                      <td>Boat 11</td>
+                      <td>Mactan Port -> Caohagan</td>
+                      <td><span class="badge text-bg-info">Docking</span></td>
+                      <td>14:16</td>
+                    </tr>
+                    <tr>
+                      <td>Boat 06</td>
+                      <td>Olanggo Port -> Marigondon</td>
+                      <td><span class="badge text-bg-success">On Track</span></td>
+                      <td>14:14</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-5">
+            <div class="cg-card h-100">
+              <div class="panel-head">
+                <h6 class="mb-0">Alert Timeline</h6>
+              </div>
+              <ul class="activity-list">
+                <li><span>Wave advisory raised near East Channel</span><small>3m ago</small></li>
+                <li><span>Boat 03 speed drop detected</span><small>9m ago</small></li>
+                <li><span>Geo-fence event at South Passage</span><small>18m ago</small></li>
+                <li><span>Route correction acknowledged by Boat 08</span><small>27m ago</small></li>
+                <li><span>Safety ping verified by Coast Station 2</span><small>41m ago</small></li>
+              </ul>
+
+              <hr>
+              <h6 class="mb-2">Zone Health</h6>
+              <div class="health-item"><span>North Channel</span><span class="dot ok"></span></div>
+              <div class="health-item"><span>East Crossing</span><span class="dot ok"></span></div>
+              <div class="health-item"><span>South Passage</span><span class="dot warn"></span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="assets/js/coastguard-theme.js"></script>
+  <script src="assets/js/layout-loader.js"></script>
+</body>
+</html>

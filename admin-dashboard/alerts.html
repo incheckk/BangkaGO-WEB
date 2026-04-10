@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BangkaGo Admin — Safety & Alerts</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/admin-theme.css"/>
+</head>
+<body data-page="alerts">
+  <div class="admin-shell">
+    <div id="sidebarMount"></div>
+
+    <main class="admin-main" id="adminMain">
+      <div id="topbarMount"></div>
+
+      <section class="admin-content container-fluid">
+        <div class="row g-3">
+          <div class="col-xl-6">
+            <div class="panel-card">
+              <div class="panel-head"><h6 class="mb-0">View Weather</h6></div>
+              <p><strong>Zone 2:</strong> Moderate winds, light rain expected</p>
+              <button class="btn btn-outline-bangkago btn-sm">Trigger Safety Alert</button>
+            </div>
+          </div>
+
+          <div class="col-xl-6">
+            <div class="panel-card">
+              <div class="panel-head"><h6 class="mb-0">Resolve Alert</h6></div>
+              <ul class="activity-list">
+                <li><span>High wave warning at Port C</span><small>Open</small></li>
+                <li><span>Boat B-008 speed spike</span><small>In review</small></li>
+                <li><span>Dock congestion warning</span><small>Open</small></li>
+              </ul>
+              <button class="btn btn-bangkago btn-sm mt-2">Resolve Selected Alert</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-card mt-3">
+          <div class="panel-head"><h6 class="mb-0">View Alert History</h6></div>
+          <div class="table-responsive">
+            <table class="table table-theme align-middle mb-0">
+              <thead>
+                <tr>
+                  <th>Alert ID</th>
+                  <th>Type</th>
+                  <th>Zone</th>
+                  <th>Status</th>
+                  <th>Resolved At</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>AL-120</td>
+                  <td>Weather</td>
+                  <td>Zone 1</td>
+                  <td><span class="badge text-bg-success">Resolved</span></td>
+                  <td>2026-04-08 09:12</td>
+                </tr>
+                <tr>
+                  <td>AL-121</td>
+                  <td>Speed</td>
+                  <td>Zone 2</td>
+                  <td><span class="badge text-bg-success">Resolved</span></td>
+                  <td>2026-04-08 11:45</td>
+                </tr>
+                <tr>
+                  <td>AL-122</td>
+                  <td>Dock</td>
+                  <td>Port B</td>
+                  <td><span class="badge text-bg-warning">Open</span></td>
+                  <td>-</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="assets/js/admin-theme.js"></script>
+  <script src="assets/js/layout-loader.js"></script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BangkaGo Admin — Reports & Logs</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/admin-theme.css"/>
+</head>
+<body data-page="reports">
+  <div class="admin-shell">
+    <div id="sidebarMount"></div>
+
+    <main class="admin-main" id="adminMain">
+      <div id="topbarMount"></div>
+
+      <section class="admin-content container-fluid">
+        <div class="row g-3">
+          <div class="col-xl-8">
+            <div class="panel-card">
+              <div class="panel-head">
+                <h6 class="mb-0">View User Reports / Audit Logs</h6>
+              </div>
+
+              <div class="table-responsive">
+                <table class="table table-theme align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th>Ref ID</th>
+                      <th>Type</th>
+                      <th>Assigned To</th>
+                      <th>Status</th>
+                      <th>Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>#R-801</td>
+                      <td>User Report</td>
+                      <td>Admin A</td>
+                      <td><span class="badge text-bg-warning">Open</span></td>
+                      <td>2026-04-09</td>
+                    </tr>
+                    <tr>
+                      <td>#R-802</td>
+                      <td>Audit Log</td>
+                      <td>Admin B</td>
+                      <td><span class="badge text-bg-success">Resolved</span></td>
+                      <td>2026-04-09</td>
+                    </tr>
+                    <tr>
+                      <td>#R-803</td>
+                      <td>System Alert</td>
+                      <td>Admin C</td>
+                      <td><span class="badge text-bg-info">In Progress</span></td>
+                      <td>2026-04-08</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-4">
+            <div class="panel-card h-100">
+              <div class="panel-head"><h6 class="mb-0">Actions</h6></div>
+              <div class="d-grid gap-2">
+                <button class="btn btn-outline-bangkago">Assign/Resolve Reports</button>
+                <button class="btn btn-outline-bangkago">View Audit Logs</button>
+                <button class="btn btn-outline-bangkago">Export Report</button>
+                <button class="btn btn-bangkago">Export System Logs</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="assets/js/admin-theme.js"></script>
+  <script src="assets/js/layout-loader.js"></script>
+</body>
+</html>

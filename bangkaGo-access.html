@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BangkaGo Portal Access</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+
+  <style>
+    :root{
+      --blue-900:#0a2540;
+      --blue-800:#0d3360;
+      --blue-600:#1565c0;
+      --white:#fff;
+      --gray-50:#f8fafc;
+      --gray-200:#e2e8f0;
+      --gray-600:#475569;
+      --radius:18px;
+      --font-display:'Sora',sans-serif;
+      --font-body:'DM Sans',sans-serif;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;min-height:100vh;font-family:var(--font-body);
+      background:linear-gradient(145deg,#f6fbff,#eef4fb);
+      color:var(--gray-600);display:flex;align-items:center;justify-content:center;padding:1rem;
+    }
+    .portal-wrap{
+      width:min(980px,100%);background:#fff;border:1px solid var(--gray-200);
+      border-radius:var(--radius);box-shadow:0 10px 30px rgba(2,26,56,.08);overflow:hidden;
+    }
+    .portal-head{
+      background:linear-gradient(135deg,var(--blue-900),var(--blue-800));
+      color:#fff;padding:1.1rem 1.25rem;
+    }
+    .portal-head h1{margin:0;font-family:var(--font-display);font-size:1.15rem}
+    .portal-head p{margin:.3rem 0 0;opacity:.85;font-size:.92rem}
+    .portal-body{padding:1.1rem}
+    .portal-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+    .portal-card{
+      border:1px solid var(--gray-200);border-radius:14px;padding:1rem;text-decoration:none;color:inherit;
+      transition:.2s ease;display:block;background:#fff;cursor:pointer;
+    }
+    .portal-card:hover{transform:translateY(-2px);border-color:#c8def7;box-shadow:0 8px 18px rgba(21,101,192,.12)}
+    .portal-icon{
+      width:42px;height:42px;border-radius:10px;display:grid;place-items:center;margin-bottom:.7rem;
+      background:#eaf3ff;color:var(--blue-600);font-size:1.2rem;
+    }
+    .portal-card h3{margin:0;font-size:1.05rem;font-family:var(--font-display);color:#102a43}
+    .portal-card p{margin:.4rem 0 .9rem;font-size:.92rem;color:#526277}
+    .pill{
+      display:inline-flex;align-items:center;gap:.35rem;border-radius:999px;padding:.28rem .58rem;
+      font-size:.78rem;font-weight:700;border:1px solid;
+    }
+    .pill-admin{color:#155eef;background:#eef4ff;border-color:#cfe0ff}
+    .pill-readonly{color:#0369a1;background:#ecfeff;border-color:#b9f2ff}
+    .portal-foot{
+      border-top:1px solid var(--gray-200);padding:.85rem 1.1rem;font-size:.84rem;color:#64748b;background:#fbfdff;
+    }
+    .login-note{font-size:.82rem;color:#64748b;margin-top:.35rem}
+    @media (max-width:768px){.portal-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="portal-wrap">
+    <div class="portal-head">
+      <h1>BangkaGo Access Portal</h1>
+      <p>Select your workspace to continue</p>
+    </div>
+
+    <div class="portal-body">
+      <div class="portal-grid">
+        <button type="button" class="portal-card text-start" data-bs-toggle="modal" data-bs-target="#loginModal">
+          <div class="portal-icon"><i class="bi bi-shield-lock-fill"></i></div>
+          <h3>Admin Dashboard</h3>
+          <p>Full management access for users, bookings, routes, payments, and system actions.</p>
+          <span class="pill pill-admin"><i class="bi bi-pencil-square"></i> Full Access</span>
+        </button>
+
+        <button type="button" class="portal-card text-start" data-bs-toggle="modal" data-bs-target="#loginModal">
+          <div class="portal-icon"><i class="bi bi-eye-fill"></i></div>
+          <h3>Coast Guard Dashboard</h3>
+          <p>Read-only monitoring for vessel activity, alerts, live tracking, and incident logs.</p>
+          <span class="pill pill-readonly"><i class="bi bi-lock-fill"></i> Read Only</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="portal-foot">
+      Demo static users: <strong>admin/admin123</strong> and <strong>coastguard/cg123</strong>
+    </div>
+  </div>
+
+  <!-- Shared Login Modal -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0" style="border-radius:14px;">
+        <div class="modal-header" style="background:linear-gradient(135deg,#0a2540,#0d3360); color:#fff;">
+          <h5 class="modal-title"><i class="bi bi-person-lock me-2"></i>Portal Login</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+
+        <form id="portalLoginForm">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label">Username</label>
+              <input type="text" class="form-control" id="loginUser" placeholder="admin or coastguard" required />
+            </div>
+            <div class="mb-2">
+              <label class="form-label">Password</label>
+              <input type="password" class="form-control" id="loginPass" placeholder="Enter password" required />
+            </div>
+            <div class="login-note">Static demo only (frontend). Role route is automatic after login.</div>
+            <div id="loginError" class="text-danger small mt-2 d-none">Invalid credentials.</div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn text-white" style="background:#1565c0;">Login</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const accounts = {
+      admin: { password: "admin123", role: "admin" },
+      coastguard: { password: "cg123", role: "coastguard" }
+    };
+
+    const form = document.getElementById("portalLoginForm");
+    const userInput = document.getElementById("loginUser");
+    const passInput = document.getElementById("loginPass");
+    const errorEl = document.getElementById("loginError");
+
+    form.addEventListener("submit", function(e){
+      e.preventDefault();
+
+      const username = userInput.value.trim().toLowerCase();
+      const password = passInput.value.trim();
+      const account = accounts[username];
+
+      if (!account || account.password !== password) {
+        errorEl.classList.remove("d-none");
+        return;
+      }
+
+      if (account.role === "admin") {
+        window.location.href = "admin-dashboard/index.html";
+      } else {
+        window.location.href = "coastguard-dashboard/index.html";
+      }
+    });
+  </script>
+</body>
+</html>
