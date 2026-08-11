@@ -11,31 +11,21 @@
 
   <style>
     :root{
-      --blue-900:#0a2540;
-      --blue-800:#0d3360;
-      --blue-600:#1565c0;
-      --white:#fff;
-      --gray-50:#f8fafc;
-      --gray-200:#e2e8f0;
-      --gray-600:#475569;
-      --radius:18px;
-      --font-display:'Sora',sans-serif;
-      --font-body:'DM Sans',sans-serif;
+      --blue-900:#0a2540; --blue-800:#0d3360; --blue-600:#1565c0;
+      --white:#fff; --gray-200:#e2e8f0; --gray-600:#475569;
+      --radius:18px; --font-display:'Sora',sans-serif; --font-body:'DM Sans',sans-serif;
     }
     *{box-sizing:border-box}
     body{
       margin:0;min-height:100vh;font-family:var(--font-body);
-      background:linear-gradient(145deg,#f6fbff,#eef4fb);
-      color:var(--gray-600);display:flex;align-items:center;justify-content:center;padding:1rem;
+      background:linear-gradient(145deg,#f6fbff,#eef4fb);color:var(--gray-600);
+      display:flex;align-items:center;justify-content:center;padding:1rem;
     }
     .portal-wrap{
       width:min(980px,100%);background:#fff;border:1px solid var(--gray-200);
       border-radius:var(--radius);box-shadow:0 10px 30px rgba(2,26,56,.08);overflow:hidden;
     }
-    .portal-head{
-      background:linear-gradient(135deg,var(--blue-900),var(--blue-800));
-      color:#fff;padding:1.1rem 1.25rem;
-    }
+    .portal-head{background:linear-gradient(135deg,var(--blue-900),var(--blue-800));color:#fff;padding:1.1rem 1.25rem}
     .portal-head h1{margin:0;font-family:var(--font-display);font-size:1.15rem}
     .portal-head p{margin:.3rem 0 0;opacity:.85;font-size:.92rem}
     .portal-body{padding:1.1rem}
@@ -51,15 +41,10 @@
     }
     .portal-card h3{margin:0;font-size:1.05rem;font-family:var(--font-display);color:#102a43}
     .portal-card p{margin:.4rem 0 .9rem;font-size:.92rem;color:#526277}
-    .pill{
-      display:inline-flex;align-items:center;gap:.35rem;border-radius:999px;padding:.28rem .58rem;
-      font-size:.78rem;font-weight:700;border:1px solid;
-    }
+    .pill{display:inline-flex;align-items:center;gap:.35rem;border-radius:999px;padding:.28rem .58rem;font-size:.78rem;font-weight:700;border:1px solid}
     .pill-admin{color:#155eef;background:#eef4ff;border-color:#cfe0ff}
     .pill-readonly{color:#0369a1;background:#ecfeff;border-color:#b9f2ff}
-    .portal-foot{
-      border-top:1px solid var(--gray-200);padding:.85rem 1.1rem;font-size:.84rem;color:#64748b;background:#fbfdff;
-    }
+    .portal-foot{border-top:1px solid var(--gray-200);padding:.85rem 1.1rem;font-size:.84rem;color:#64748b;background:#fbfdff}
     .login-note{font-size:.82rem;color:#64748b;margin-top:.35rem}
     @media (max-width:768px){.portal-grid{grid-template-columns:1fr}}
   </style>
@@ -68,7 +53,7 @@
   <div class="portal-wrap">
     <div class="portal-head">
       <h1>BangkaGo Access Portal</h1>
-      <p>Select your workspace to continue</p>
+      <p>Role-based routing: Admin or LGU/Coast Guard</p>
     </div>
 
     <div class="portal-body">
@@ -76,25 +61,24 @@
         <button type="button" class="portal-card text-start" data-bs-toggle="modal" data-bs-target="#loginModal">
           <div class="portal-icon"><i class="bi bi-shield-lock-fill"></i></div>
           <h3>Admin Dashboard</h3>
-          <p>Full management access for users, bookings, routes, payments, and system actions.</p>
+          <p>Manage users, bangkeros, bangkas, routes, bookings, fleet, payments, reports, alerts.</p>
           <span class="pill pill-admin"><i class="bi bi-pencil-square"></i> Full Access</span>
         </button>
 
         <button type="button" class="portal-card text-start" data-bs-toggle="modal" data-bs-target="#loginModal">
           <div class="portal-icon"><i class="bi bi-eye-fill"></i></div>
-          <h3>Coast Guard Dashboard</h3>
-          <p>Read-only monitoring for vessel activity, alerts, live tracking, and incident logs.</p>
-          <span class="pill pill-readonly"><i class="bi bi-lock-fill"></i> Read Only</span>
+          <h3>LGU / Coast Guard Dashboard</h3>
+          <p>View manifests, track vessel, view weather, and report compliance issues.</p>
+          <span class="pill pill-readonly"><i class="bi bi-lock-fill"></i> Monitored Access</span>
         </button>
       </div>
     </div>
 
     <div class="portal-foot">
-      Demo static users: <strong>admin/admin123</strong> and <strong>coastguard/cg123</strong>
+      Demo users: <strong>admin/admin123</strong> and <strong>coastguard/cg123</strong>
     </div>
   </div>
 
-  <!-- Shared Login Modal -->
   <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content border-0" style="border-radius:14px;">
@@ -113,7 +97,7 @@
               <label class="form-label">Password</label>
               <input type="password" class="form-control" id="loginPass" placeholder="Enter password" required />
             </div>
-            <div class="login-note">Static demo only (frontend). Role route is automatic after login.</div>
+            <div class="login-note">Static demo auth only. Role routing is automatic after login.</div>
             <div id="loginError" class="text-danger small mt-2 d-none">Invalid credentials.</div>
           </div>
           <div class="modal-footer">
@@ -139,7 +123,6 @@
 
     form.addEventListener("submit", function(e){
       e.preventDefault();
-
       const username = userInput.value.trim().toLowerCase();
       const password = passInput.value.trim();
       const account = accounts[username];
@@ -149,11 +132,8 @@
         return;
       }
 
-      if (account.role === "admin") {
-        window.location.href = "admin-dashboard/index.html";
-      } else {
-        window.location.href = "coastguard-dashboard/index.html";
-      }
+      if (account.role === "admin") window.location.href = "admin-dashboard/admin-dashboard.html";
+      else window.location.href = "coastguard-dashboard/index.html";
     });
   </script>
 </body>

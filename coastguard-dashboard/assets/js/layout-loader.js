@@ -13,34 +13,64 @@
     loadPartial('partials/topbar.html', topbarMount),
   ]);
 
+  // Topbar titles/subtitles aligned to your final 8-file setup
   const topbarMeta = {
-    'index': { title: 'Dashboard', subtitle: 'Read-only maritime monitoring overview' },
-    'tracking': { title: 'View Live Route', subtitle: 'Live vessel route and movement view' },
-    'alerts': { title: 'View Active Alerts', subtitle: 'Safety and maritime warnings timeline' },
-    'reports': { title: 'View Operator Records', subtitle: 'Read-only operator and activity records' },
-    'search-vessel': { title: 'Search Vessel', subtitle: 'Lookup vessel profile and latest status' },
-    'search-manifest': { title: 'Search Manifest', subtitle: 'Lookup manifests and passenger load' },
-    'port-history': { title: 'View Port History', subtitle: 'Port arrivals/departures history' },
-    'verify-departure': { title: 'Verify Departure', subtitle: 'Read-only departure verification log' },
-    'export-manifest': { title: 'Export Manifest', subtitle: 'Download manifest snapshots (read-only)' }
+    'index': {
+      title: 'Dashboard',
+      subtitle: 'LGU / Coast Guard monitoring overview'
+    },
+    'track-vessel': {
+      title: 'Track Vessel',
+      subtitle: 'Live fleet movement, route watch, and position history'
+    },
+    'view-manifests': {
+      title: 'View Manifests',
+      subtitle: 'Read-only passenger/cargo manifests with quick export'
+    },
+    'view-weather': {
+      title: 'View Weather',
+      subtitle: 'Marine weather, sea conditions, and advisories'
+    },
+    'view-bangkeros': {
+      title: 'View Bangkeros',
+      subtitle: 'Read-only list of registered bangkero records'
+    },
+    'report-compliance': {
+      title: 'Report Compliance Issue',
+      subtitle: 'Submit compliance concerns for admin review'
+    },
+    'alerts': {
+      title: 'View Active Alerts',
+      subtitle: 'Alert feed with vessel, severity, and response status'
+    },
+    'reports': {
+      title: 'View Operator Records',
+      subtitle: 'Operator activity logs and compliance-related records'
+    }
   };
 
-  const page = document.body.dataset.page || 'index';
+  // derive current file and page key
+  const currentFile = location.pathname.split('/').pop() || 'index.html';
+  const currentKey = currentFile.replace('.html', '');
+
+  // set topbar content
   const titleEl = document.getElementById('topbarTitle');
   const subtitleEl = document.getElementById('topbarSubtitle');
+  const meta = topbarMeta[currentKey] || topbarMeta['index'];
 
-  if (topbarMeta[page]) {
-    if (titleEl) titleEl.textContent = topbarMeta[page].title;
-    if (subtitleEl) subtitleEl.textContent = topbarMeta[page].subtitle;
-  }
+  if (titleEl) titleEl.textContent = meta.title;
+  if (subtitleEl) subtitleEl.textContent = meta.subtitle;
 
-  const currentFile = location.pathname.split('/').pop() || 'index.html';
+  // mark active sidebar link
   document.querySelectorAll('#cgNav a[data-page]').forEach(a => {
     if (a.dataset.page === currentFile) a.classList.add('active');
   });
 
-  const script = document.createElement('script');
-  script.src = 'assets/js/coastguard-theme.js';
-  script.defer = true;
-  document.body.appendChild(script);
+  // ensure theme behavior script is available
+  if (!document.querySelector('script[src="assets/js/coastguard-theme.js"]')) {
+    const script = document.createElement('script');
+    script.src = 'assets/js/coastguard-theme.js';
+    script.defer = true;
+    document.body.appendChild(script);
+  }
 })();

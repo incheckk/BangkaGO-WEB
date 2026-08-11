@@ -1,22 +1,26 @@
-<header class="admin-topbar">
-  <div class="d-flex align-items-center gap-2">
-    <button id="sidebarMobileToggle" class="btn btn-light d-lg-none topbar-btn">
-      <i class="bi bi-list fs-5"></i>
-    </button>
-    <button id="sidebarDesktopToggle" class="btn btn-light d-none d-lg-inline-flex topbar-btn" title="Collapse Sidebar">
-      <i class="bi bi-layout-sidebar-inset"></i>
-    </button>
-    <div>
-      <h4 class="mb-0" id="topbarTitle">Dashboard</h4>
-      <small id="topbarSubtitle">Admin control panel</small>
-    </div>
+<header class="cg-topbar">
+  <div>
+    <h4 id="topbarTitle" class="mb-0">Dashboard</h4>
+    <small id="topbarSubtitle" class="text-secondary">Admin operations overview</small>
   </div>
 
-  <div class="topbar-right">
-    <button class="icon-btn"><i class="bi bi-bell"></i></button>
-    <button class="icon-btn"><i class="bi bi-envelope"></i></button>
-    <div class="admin-pill">
-      <i class="bi bi-person-circle me-1"></i> BiniAiah
+  <div class="topbar-actions d-flex align-items-center gap-2">
+    <button class="btn btn-sm btn-outline-secondary" type="button" title="Notifications">
+      <i class="bi bi-bell"></i>
+    </button>
+    <button class="btn btn-sm btn-outline-secondary" type="button" title="Settings">
+      <i class="bi bi-gear"></i>
+    </button>
+    <div class="dropdown">
+      <button class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        Admin
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li><a class="dropdown-item" href="#">Profile</a></li>
+        <li><a class="dropdown-item" href="#">Preferences</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" href="../bangkaGo-access.html">Logout</a></li>
+      </ul>
     </div>
   </div>
 </header>
