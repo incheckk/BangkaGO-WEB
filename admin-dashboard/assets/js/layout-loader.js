@@ -1,53 +1,97 @@
 (async function () {
-  async function injectPartial(selector, path) {
-    const mount = document.querySelector(selector);
-    if (!mount) return;
+  const sidebarMount = document.getElementById('sidebarMount');
+  const topbarMount = document.getElementById('topbarMount');
 
-    try {
-      const res = await fetch(path, { cache: 'no-cache' });
-      if (!res.ok) throw new Error(`Failed to load ${path}: ${res.status}`);
-      mount.innerHTML = await res.text();
-    } catch (err) {
-      console.error(err);
-      mount.innerHTML = `
-        <div style="padding:12px;background:#fff3cd;border:1px solid #ffe69c;border-radius:8px;margin:12px;">
-          Failed to load partial: <strong>${path}</strong>
-        </div>
-      `;
-    }
+  async function loadPartial(path, mountEl) {
+    const res = await fetch(path);
+    const html = await res.text();
+    mountEl.innerHTML = html;
   }
 
-  // Inject shared partials
-  await injectPartial('#sidebarMount', 'partials/sidebar.html');
-  await injectPartial('#topbarMount', 'partials/topbar.html');
+  await Promise.all([
+    loadPartial('partials/sidebar.html', sidebarMount),
+    loadPartial('partials/topbar.html', topbarMount),
+  ]);
 
-  // Topbar dynamic labels by page
-  const page = document.body.getAttribute('data-page') || 'index';
-
+  // Topbar titles/subtitles aligned to renamed admin files
   const topbarMeta = {
-    index: { title: 'Dashboard Overview', subtitle: 'Monitor boats, users, bookings, and operations' },
-    users: { title: 'User Management', subtitle: 'View users, profiles, status, and roles' },
-    operators: { title: 'Bangkeros', subtitle: 'Review documents and approve/reject bangkeros' },
-    bookings: { title: 'Bookings', subtitle: 'View bookings, details, statuses, and manifests' },
-    'fleet-routes': { title: 'Fleet & Routes', subtitle: 'Manage bangka, routes, deactivation, and vessel history' },
-    tracking: { title: 'Tracking & Monitoring', subtitle: 'Parcel tracking, speed, ETA boards, and live map' },
-    payments: { title: 'Payments & Revenue', subtitle: 'Revenue insights and payment records' },
-    alerts: { title: 'Safety & Alerts', subtitle: 'Weather, alerts, and resolution history' },
-    reports: { title: 'Reports & Logs', subtitle: 'User reports, audit logs, and exports' },
-    analytics: { title: 'Analytics / ML Insights', subtitle: 'Predictions, model info, and retraining' },
-    broadcast: { title: 'Broadcast', subtitle: 'Send system-wide messages to selected audience' }
+    'admin-dashboard': {
+      title: 'Dashboard',
+      subtitle: 'Admin operations overview and live system snapshot'
+    },
+    'manage-users': {
+      title: 'Manage Users',
+      subtitle: 'Create, update, and monitor user access'
+    },
+    'manage-bangkeros': {
+      title: 'Manage Bangkeros',
+      subtitle: 'Maintain bangkero records and status'
+    },
+    'manage-bangka': {
+      title: 'Manage Bangka',
+      subtitle: 'Maintain vessel master list and availability'
+    },
+    'manage-routes': {
+      title: 'Manage Routes',
+      subtitle: 'Configure official routes and travel corridors'
+    },
+    'manage-bookings': {
+      title: 'Manage Bookings',
+      subtitle: 'Review booking flow, assignments, and status'
+    },
+    'track-vessel': {
+      title: 'Track Vessel',
+      subtitle: 'Merged fleet monitoring and real-time vessel tracking'
+    },
+    'manage-payments': {
+      title: 'Manage Payments',
+      subtitle: 'Track transactions, verification, and settlements'
+    },
+    'manage-alerts': {
+      title: 'Manage Alerts',
+      subtitle: 'Create and monitor operational alert rules'
+    },
+    'view-reports': {
+      title: 'View Reports',
+      subtitle: 'Operations, compliance, and system reports'
+    },
+    'analyze-demand': {
+      title: 'Analyze Demand',
+      subtitle: 'Demand trends, peak windows, and forecast insights'
+    },
+    'view-manifests': {
+      title: 'View Manifests',
+      subtitle: 'Search manifests, view passenger list, and export'
+    },
+    'view-weather': {
+      title: 'View Weather',
+      subtitle: 'Weather data and route safety status'
+    },
+    'report-compliance': {
+      title: 'Report Compliance Issue',
+      subtitle: 'File compliance incidents with evidence'
+    }
   };
+
+  const currentFile = location.pathname.split('/').pop() || 'admin-dashboard.html';
+  const currentKey = currentFile.replace('.html', '');
 
   const titleEl = document.getElementById('topbarTitle');
   const subtitleEl = document.getElementById('topbarSubtitle');
+  const meta = topbarMeta[currentKey] || topbarMeta['admin-dashboard'];
 
-  if (titleEl && subtitleEl && topbarMeta[page]) {
-    titleEl.textContent = topbarMeta[page].title;
-    subtitleEl.textContent = topbarMeta[page].subtitle;
-  }
+  if (titleEl) titleEl.textContent = meta.title;
+  if (subtitleEl) subtitleEl.textContent = meta.subtitle;
 
-  // Init interactive behaviors after partials are rendered
-  if (window.AdminTheme && typeof window.AdminTheme.init === 'function') {
-    window.AdminTheme.init();
+  document.querySelectorAll('#cgNav a[data-page]').forEach(a => {
+    if (a.dataset.page === currentFile) a.classList.add('active');
+  });
+
+  // Ensure theme JS is present
+  if (!document.querySelector('script[src="assets/js/coastguard-theme.js"]')) {
+    const script = document.createElement('script');
+    script.src = 'assets/js/coastguard-theme.js';
+    script.defer = true;
+    document.body.appendChild(script);
   }
 })();

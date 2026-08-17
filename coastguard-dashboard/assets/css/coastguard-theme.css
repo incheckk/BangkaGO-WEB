@@ -52,7 +52,7 @@ body{
 .cg-sidebar.show{transform:translateX(0)}
 .cg-sidebar.collapsed{width:88px}
 
-/* Brand (MATCHED to admin-dashboard logo sizing) */
+/* Brand (matched sizing) */
 .cg-brand{
   display:grid;
   grid-template-columns:64px 1fr;
@@ -81,7 +81,6 @@ body{
   object-fit:contain;
   display:block;
 }
-
 .cg-brand .brand-text{
   min-width:0;
   line-height:1.15;
@@ -301,7 +300,6 @@ body{
 .dot.ok{background:var(--ok)}
 .dot.warn{background:var(--warn)}
 
-/* Responsive */
 @media (max-width:991.98px){
   .cg-sidebar{transform:translateX(-100%);width:270px!important}
   .cg-sidebar.collapsed{width:270px!important}
