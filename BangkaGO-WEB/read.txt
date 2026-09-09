@@ -1,0 +1,4 @@
+buhata anything you want, after nata mo decide unsa najud porma sa ato website
+
+@everyone kung naa moy i-import or gamiton extension ibutang sa 'requirements.txt' and if mag
+database mo make sure ibutang ari sa 'dbvalues.sql' para pareha ta values ninyu
