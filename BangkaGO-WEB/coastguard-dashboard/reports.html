@@ -9,6 +9,16 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/coastguard-theme.css"/>
+  <script>
+    (function () {
+      try {
+        var role = sessionStorage.getItem("bangkago_role");
+        if (role !== "coastguard") throw new Error("unauthorized");
+      } catch (e) {
+        location.replace("../../bangkaGo-access.html");
+      }
+    })();
+  </script>
 </head>
 <body data-page="reports">
   <div class="cg-shell">
@@ -17,8 +27,8 @@
       <div id="topbarMount"></div>
 
       <section class="cg-content container-fluid">
-        <!-- KPI row -->
-        <div class="row g-3 mb-3">
+        <!-- KPI row — same border, little gap -->
+        <div class="row g-2 mb-3 kpi-strip">
           <div class="col-6 col-xl-3">
             <div class="cg-card kpi-card">
               <p>Operators Logged</p>
@@ -55,27 +65,29 @@
 
         <div class="row g-3">
           <!-- LEFT: Operator records + Departure log -->
-          <div class="col-12 col-xxl-8">
+          <div class="col-xl-8">
             <div class="cg-card mb-3">
               <div class="panel-head">
                 <h6 class="mb-0">Operator Records (Read-Only)</h6>
-                <span class="readonly-pill"><i class="bi bi-eye-fill"></i> No Edit / Delete</span>
+                <span class="readonly-pill"><i class="bi bi-eye-fill"></i> Read Only</span>
               </div>
 
-              <div class="row g-2 mb-3">
-                <div class="col-md-5">
-                  <input id="opSearchInput" class="form-control" type="text" placeholder="Search operator, vessel, or ID">
+              <div class="row g-2 mb-3 align-items-end filter-row">
+                <div class="col-12 col-sm-6 col-md-5">
+                  <label class="form-label visually-hidden" for="opSearchInput">Search</label>
+                  <input id="opSearchInput" class="form-control w-100" type="text" placeholder="Search operator, vessel, or ID">
                 </div>
-                <div class="col-md-3">
-                  <select id="opStatusFilter" class="form-select">
+                <div class="col-6 col-sm-6 col-md-3">
+                  <label class="form-label visually-hidden" for="opStatusFilter">Status</label>
+                  <select id="opStatusFilter" class="form-select w-100">
                     <option value="">All Status</option>
                     <option value="Active">Active</option>
                     <option value="On Duty">On Duty</option>
                     <option value="Suspended">Suspended</option>
                   </select>
                 </div>
-                <div class="col-md-2 d-grid">
-                  <button id="opResetBtn" class="btn btn-outline-secondary" type="button">Reset</button>
+                <div class="col-12 col-sm-6 col-md-2 d-grid">
+                  <button id="opResetBtn" class="btn btn-outline-secondary w-100" type="button"><i class="bi bi-arrow-counterclockwise"></i> Reset</button>
                 </div>
               </div>
 
@@ -97,7 +109,7 @@
                 </table>
               </div>
 
-              <p id="opEmptyState" class="text-center text-secondary my-3 d-none">
+              <p id="opEmptyState" class="cg-empty d-none">
                 No operator records matched your filters.
               </p>
             </div>
@@ -109,20 +121,22 @@
                 <span class="muted-note">Read-only monitoring</span>
               </div>
 
-              <div class="row g-2 mb-3">
-                <div class="col-md-5">
-                  <input id="depSearchInput" class="form-control" type="text" placeholder="Search vessel or verifier">
+              <div class="row g-2 mb-3 align-items-end filter-row">
+                <div class="col-12 col-sm-6 col-md-5">
+                  <label class="form-label visually-hidden" for="depSearchInput">Search</label>
+                  <input id="depSearchInput" class="form-control w-100" type="text" placeholder="Search vessel or verifier">
                 </div>
-                <div class="col-md-3">
-                  <select id="depResultFilter" class="form-select">
+                <div class="col-6 col-sm-6 col-md-3">
+                  <label class="form-label visually-hidden" for="depResultFilter">Result</label>
+                  <select id="depResultFilter" class="form-select w-100">
                     <option value="">All Results</option>
                     <option value="Approved">Approved</option>
                     <option value="Conditional">Conditional</option>
                     <option value="Rejected">Rejected</option>
                   </select>
                 </div>
-                <div class="col-md-2 d-grid">
-                  <button id="depResetBtn" class="btn btn-outline-secondary" type="button">Reset</button>
+                <div class="col-12 col-sm-6 col-md-2 d-grid">
+                  <button id="depResetBtn" class="btn btn-outline-secondary w-100" type="button"><i class="bi bi-arrow-counterclockwise"></i> Reset</button>
                 </div>
               </div>
 
@@ -142,14 +156,14 @@
                 </table>
               </div>
 
-              <p id="depEmptyState" class="text-center text-secondary my-3 d-none">
+              <p id="depEmptyState" class="cg-empty d-none">
                 No departure logs matched your filters.
               </p>
             </div>
           </div>
 
           <!-- RIGHT: Compliance history -->
-          <div class="col-12 col-xxl-4">
+          <div class="col-xl-4">
             <div class="cg-card h-100">
               <div class="panel-head">
                 <h6 class="mb-0">Compliance History Feed</h6>

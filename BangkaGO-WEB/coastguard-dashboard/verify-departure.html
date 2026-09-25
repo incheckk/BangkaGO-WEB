@@ -9,6 +9,16 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/coastguard-theme.css"/>
+  <script>
+    (function () {
+      try {
+        var role = sessionStorage.getItem("bangkago_role");
+        if (role !== "coastguard") throw new Error("unauthorized");
+      } catch (e) {
+        location.replace("../../bangkaGo-access.html");
+      }
+    })();
+  </script>
 </head>
 <body data-page="verify-departure">
   <div class="cg-shell">
@@ -22,28 +32,30 @@
             <div class="cg-card">
               <div class="panel-head">
                 <h6 class="mb-0">Departure Verification Log (Read-Only)</h6>
-                <span class="readonly-pill"><i class="bi bi-eye-fill"></i> No Actions Allowed</span>
+                <span class="readonly-pill"><i class="bi bi-eye-fill"></i> Read Only</span>
               </div>
 
               <!-- Search controls -->
-              <div class="row g-2 mb-3">
-                <div class="col-md-5">
-                  <input id="verifySearchInput" class="form-control" type="text" placeholder="Search by Ref No, vessel, port, or verifier">
+              <div class="row g-2 mb-3 align-items-end filter-row">
+                <div class="col-12 col-md-5">
+                  <label class="form-label visually-hidden" for="verifySearchInput">Search</label>
+                  <input id="verifySearchInput" class="form-control w-100" type="text" placeholder="Search by Ref No, vessel, port, or verifier">
                 </div>
-                <div class="col-md-3">
-                  <select id="verifyStatusFilter" class="form-select">
+                <div class="col-6 col-md-3">
+                  <label class="form-label visually-hidden" for="verifyStatusFilter">Result</label>
+                  <select id="verifyStatusFilter" class="form-select w-100">
                     <option value="">All Results</option>
                     <option value="Approved">Approved</option>
                     <option value="Conditional">Conditional</option>
                     <option value="Rejected">Rejected</option>
                   </select>
                 </div>
-                <div class="col-md-4 d-flex gap-2">
-                  <button id="verifySearchBtn" class="btn btn-primary w-100" type="button">
-                    <i class="bi bi-search me-1"></i> Search
+                <div class="col-6 col-md-4 d-flex gap-2">
+                  <button id="verifySearchBtn" class="btn btn-primary flex-fill" type="button">
+                    <i class="bi bi-search"></i> Search
                   </button>
-                  <button id="verifyResetBtn" class="btn btn-outline-secondary w-100" type="button">
-                    Reset
+                  <button id="verifyResetBtn" class="btn btn-outline-secondary flex-fill" type="button">
+                    <i class="bi bi-arrow-counterclockwise"></i> Reset
                   </button>
                 </div>
               </div>
@@ -68,7 +80,7 @@
                 </table>
               </div>
 
-              <p id="verifyEmptyState" class="text-center text-secondary my-3 d-none">
+              <p id="verifyEmptyState" class="cg-empty d-none">
                 No departure records found.
               </p>
             </div>
