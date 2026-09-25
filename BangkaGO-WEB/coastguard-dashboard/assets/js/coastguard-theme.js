@@ -22,11 +22,41 @@
         if (saved === '1') applyDesktopCollapsed(true);
       }catch(e){}
     }
+    function updateBackdrop(){
+      const backdrop = document.getElementById('cgBackdrop');
+      if(!backdrop) return;
+      if(window.innerWidth < 992 && sidebar.classList.contains('show')){
+        backdrop.classList.add('show');
+        document.body.style.overflow = 'hidden';
+      } else {
+        backdrop.classList.remove('show');
+        document.body.style.overflow = '';
+      }
+    }
+    function setupBackdrop(){
+      let backdrop = document.getElementById('cgBackdrop');
+      if(!backdrop){
+        backdrop = document.createElement('div');
+        backdrop.id = 'cgBackdrop';
+        backdrop.className = 'cg-sidebar-backdrop';
+        backdrop.style.cssText = 'position:fixed;inset:0;background:rgba(10,30,58,.45);z-index:1049;opacity:0;pointer-events:none;transition:opacity .2s ease;';
+        document.body.appendChild(backdrop);
+        backdrop.addEventListener('click', function(){
+          sidebar.classList.remove('show');
+          updateBackdrop();
+        });
+        const style = document.createElement('style');
+        style.textContent = '#cgBackdrop.show{opacity:1;pointer-events:auto;}';
+        document.head.appendChild(style);
+      }
+      updateBackdrop();
+    }
 
     if (mobileToggle) {
       mobileToggle.addEventListener('click', function(e){
         e.stopPropagation();
         sidebar.classList.toggle('show');
+        updateBackdrop();
       });
     }
     if (desktopToggle) {
@@ -40,11 +70,17 @@
       if (!sidebar.classList.contains('show')) return;
       const inside = sidebar.contains(e.target);
       const toggle = mobileToggle && mobileToggle.contains(e.target);
-      if (!inside && !toggle) sidebar.classList.remove('show');
+      if (!inside && !toggle) { sidebar.classList.remove('show'); updateBackdrop(); }
+    });
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape' && sidebar.classList.contains('show')){
+        sidebar.classList.remove('show'); updateBackdrop();
+      }
     });
     window.addEventListener('resize', function(){
       if (window.innerWidth >= 992){
         sidebar.classList.remove('show');
+        updateBackdrop();
         initDesktopState();
       } else {
         sidebar.classList.remove('collapsed');
@@ -52,6 +88,7 @@
       }
     });
     initDesktopState();
+    setupBackdrop();
     setupNavScroll();
   }
   const NAV_SCROLL_KEY = 'bangkago_cg_nav_scroll';

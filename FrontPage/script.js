@@ -6,9 +6,10 @@
 'use strict';
 
 /* ——————————————————————————————————————————————
-   1. NAVBAR: Background change on scroll
+   1. NAVBAR: Background change on scroll + progress bar (RAF-throttled)
 —————————————————————————————————————————————— */
 const mainNav = document.getElementById('mainNav');
+const scrollProgress = document.getElementById('scrollProgress');
 
 function handleNavScroll() {
     if (window.scrollY > 60) {
@@ -16,29 +17,58 @@ function handleNavScroll() {
     } else {
         mainNav.classList.remove('scrolled');
     }
+
+    if (scrollProgress) {
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollPercent = docHeight > 0 ? (window.scrollY / docHeight) * 100 : 0;
+        scrollProgress.style.width = scrollPercent + '%';
+    }
 }
 
-window.addEventListener('scroll', handleNavScroll, { passive: true });
-handleNavScroll(); // run on load
+let scrollTicking = false;
+function onScroll() {
+    if (!scrollTicking) {
+        requestAnimationFrame(function () {
+            handleNavScroll();
+            highlightNavLink();
+            scrollTicking = false;
+        });
+        scrollTicking = true;
+    }
+}
+
+window.addEventListener('scroll', onScroll, { passive: true });
+handleNavScroll();
 
 
 /* ——————————————————————————————————————————————
    2. NAVBAR: Active link highlighting on scroll
 —————————————————————————————————————————————— */
 const navLinks = document.querySelectorAll('#navMenu .nav-link');
-const sections = document.querySelectorAll('section[id], div[id]');
+
+// Only track the actual sections the navbar links to (in DOM/document order),
+// not every element with an id on the page — otherwise nested elements like
+// form success alerts can hijack the "current section" calculation.
+const navSections = Array.from(navLinks)
+    .map(function (link) { return link.getAttribute('href'); })
+    .filter(function (href) { return href && href.charAt(0) === '#' && href.length > 1; })
+    .map(function (href) { return document.querySelector(href); })
+    .filter(Boolean);
 
 function highlightNavLink() {
     let currentSection = '';
+    const navOffset = (mainNav ? mainNav.offsetHeight : 0) + 40;
 
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop - 90;
+    navSections.forEach(function (section) {
+        // getBoundingClientRect + scrollY gives the true page position,
+        // unaffected by any positioned ancestor (unlike .offsetTop).
+        const sectionTop = section.getBoundingClientRect().top + window.scrollY - navOffset;
         if (window.scrollY >= sectionTop) {
             currentSection = section.getAttribute('id');
         }
     });
 
-    navLinks.forEach(link => {
+    navLinks.forEach(function (link) {
         link.classList.remove('active');
         if (link.getAttribute('href') === '#' + currentSection) {
             link.classList.add('active');
@@ -46,27 +76,91 @@ function highlightNavLink() {
     });
 }
 
-window.addEventListener('scroll', highlightNavLink, { passive: true });
-
 
 /* ——————————————————————————————————————————————
-   3. SMOOTH SCROLLING for all anchor links
+   3. SMOOTH SCROLLING — custom eased RAF (Option A)
 —————————————————————————————————————————————— */
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+let scrollAnimId = null;
+
+function easeInOutCubic(t) {
+    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+}
+
+function cancelSmoothScroll() {
+    if (scrollAnimId !== null) {
+        cancelAnimationFrame(scrollAnimId);
+        scrollAnimId = null;
+    }
+}
+
+['wheel', 'touchstart', 'keydown'].forEach(function (evt) {
+    window.addEventListener(evt, function (e) {
+        if (evt === 'keydown' && !['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].includes(e.key)) return;
+        cancelSmoothScroll();
+    }, { passive: true });
+});
+
+function smoothScrollTo(targetId, duration) {
+    const targetEl = document.querySelector(targetId);
+    if (!targetEl) return;
+
+    if (prefersReducedMotion) {
+        const navH = mainNav ? mainNav.offsetHeight : 0;
+        const pos = targetEl.getBoundingClientRect().top + window.scrollY - navH - 16;
+        window.scrollTo(0, pos);
+        return;
+    }
+
+    duration = duration || 900;
+    cancelSmoothScroll();
+
+    const startY = window.scrollY;
+    const navHeight = mainNav ? mainNav.offsetHeight : 0;
+    const targetPos = targetEl.getBoundingClientRect().top + window.scrollY - navHeight - 16;
+    const distance = targetPos - startY;
+    const startTime = performance.now();
+
+    // Scale duration slightly with distance (min 600ms, max 1100ms if not explicitly passed)
+    if (arguments.length < 2) {
+        const absDist = Math.abs(distance);
+        duration = Math.min(1100, Math.max(600, 600 + absDist * 0.25));
+    }
+
+    function step(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = easeInOutCubic(progress);
+        window.scrollTo(0, startY + distance * eased);
+
+        if (progress < 1) {
+            scrollAnimId = requestAnimationFrame(step);
+        } else {
+            scrollAnimId = null;
+            // Ensure final position exact (handles nav height shift during anim)
+            const finalNavH = mainNav ? mainNav.offsetHeight : 0;
+            const finalPos = targetEl.getBoundingClientRect().top + window.scrollY - finalNavH - 16;
+            if (Math.abs(window.scrollY - finalPos) > 1) {
+                window.scrollTo(0, finalPos);
+            }
+        }
+    }
+
+    scrollAnimId = requestAnimationFrame(step);
+}
+
+document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
     anchor.addEventListener('click', function (e) {
         const targetId = this.getAttribute('href');
-        const targetEl = document.querySelector(targetId);
+        if (!targetId || targetId === '#') return;
+        if (targetId.length > 1 && !document.querySelector(targetId)) return;
 
-        if (targetEl) {
-            e.preventDefault();
+        e.preventDefault();
+        smoothScrollTo(targetId);
 
-            const navHeight = mainNav.offsetHeight;
-            const targetPos = targetEl.getBoundingClientRect().top + window.scrollY - navHeight;
-
-            window.scrollTo({ top: targetPos, behavior: 'smooth' });
-
-            // Close mobile menu if open
-            const navMenu = document.getElementById('navMenu');
+        const navMenu = document.getElementById('navMenu');
+        if (navMenu && window.bootstrap) {
             const bsCollapse = bootstrap.Collapse.getInstance(navMenu);
             if (bsCollapse && navMenu.classList.contains('show')) {
                 bsCollapse.hide();
@@ -350,19 +444,30 @@ const fadeObserver = new IntersectionObserver(
         entries.forEach(function (entry) {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
-                fadeObserver.unobserve(entry.target); // animate once
+                fadeObserver.unobserve(entry.target);
             }
         });
     },
     {
-        threshold: 0.12,
-        rootMargin: '0px 0px -40px 0px'
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
     }
 );
 
-fadeEls.forEach(function (el, index) {
-    // Stagger delay based on sibling position
-    el.style.transitionDelay = (index % 4) * 0.1 + 's';
+fadeEls.forEach(function (el) {
+    const reveal = el.getAttribute('data-reveal');
+    const siblings = el.parentElement ? el.parentElement.querySelectorAll('.fade-in') : [];
+    let delay = 0;
+
+    if (reveal === 'left' || reveal === 'right') {
+        delay = 0;
+    } else {
+        Array.from(siblings).forEach(function (sib, i) {
+            if (sib === el) delay = i * 0.12;
+        });
+    }
+
+    el.style.transitionDelay = delay + 's';
     fadeObserver.observe(el);
 });
 
@@ -382,7 +487,7 @@ window.addEventListener('scroll', function () {
 
 if (backToTopBtn) {
     backToTopBtn.addEventListener('click', function () {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        smoothScrollTo('#home');
     });
 }
 

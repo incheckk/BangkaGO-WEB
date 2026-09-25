@@ -19,7 +19,6 @@
   const topbarMeta = {
     'index': { title: 'Dashboard', subtitle: 'LGU / Coast Guard monitoring overview' },
     'monitor-fleet': { title: 'Monitor Fleet', subtitle: 'Live fleet movement, route watch, and position history' },
-    'track-vessel': { title: 'Track Vessel', subtitle: 'Live fleet movement, route watch, and position history' },
     'view-manifests': { title: 'View Manifests', subtitle: 'Read-only passenger/cargo manifests with quick export' },
     'view-weather': { title: 'View Weather', subtitle: 'Marine weather, sea conditions, and advisories' },
     'view-bangkeros': { title: 'View Bangkeros', subtitle: 'Read-only list of registered bangkero records' },
@@ -45,24 +44,7 @@
     if (a.dataset.page === currentFile) a.classList.add('active');
   });
 
-  (function(){
-    try{
-      const nav = document.getElementById('cgNav');
-      if(!nav) return;
-      const key = 'bangkago_cg_nav_scroll';
-      const saved = sessionStorage.getItem(key);
-      if(saved !== null){
-        const top = parseInt(saved,10);
-        if(!isNaN(top)) nav.scrollTop = top;
-      }
-      const active = nav.querySelector('a.active');
-      if(active){
-        const r = active.getBoundingClientRect();
-        const nr = nav.getBoundingClientRect();
-        if(r.top < nr.top || r.bottom > nr.bottom) active.scrollIntoView({ block:'nearest', inline:'nearest' });
-      }
-    }catch(e){}
-  })();
+  // Scroll restoration handled by CoastguardTheme.setupNavScroll — no duplicate here
 
   if (window.CoastguardTheme && typeof window.CoastguardTheme.init === 'function'){
     window.CoastguardTheme.init();
